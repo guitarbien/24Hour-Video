@@ -38,17 +38,13 @@
           </button>
           <a class="navbar-brand" href="#">Project name</a>
         </div>
-        <div id="navbar" class="navbar-collapse collapse">
-          <form class="navbar-form navbar-right" role="form">
-            <div class="form-group">
-              <input type="text" placeholder="Email" class="form-control">
-            </div>
-            <div class="form-group">
-              <input type="password" placeholder="Password" class="form-control">
-            </div>
-            <button type="submit" class="btn btn-success">Sign in</button>
-          </form>
-        </div><!--/.navbar-collapse -->
+          <div class="navbar-form navbar-right">
+              <button id="user-profile" class="btn btn-default">
+                  <img id="profilepicture" />&nbsp;<span id="profilename"></span>
+              </button>
+              <button id="auth0-login" class="btn btn-success">Sign in</button>
+              <button id="auth0-logout" class="btn btn-success">Sign Out</button>
+          </div>
       </div>
     </nav>
 
@@ -86,11 +82,14 @@
       <footer>
         <p>&copy; Company 2015</p>
       </footer>
-    </div> <!-- /container -->        <script src="//ajax.googleapis.com/ajax/libs/jquery/1.11.2/jquery.min.js"></script>
+    </div> <!-- /container -->
+        <script src="//ajax.googleapis.com/ajax/libs/jquery/1.11.2/jquery.min.js"></script>
         <script>window.jQuery || document.write('<script src="website/js/vendor/jquery-1.11.2.min.js"><\/script>')</script>
 
         <script src="website/js/vendor/bootstrap.min.js"></script>
-
+        <script src="https://cdn.auth0.com/js/lock-9.min.js"></script>
+        <script src="website/js/user-controller.js"></script>
+        <script src="website/js/config.js"></script>
         <script src="website/js/main.js"></script>
 
         <!-- Google Analytics: change UA-XXXXX-X to be your site's ID. -->
