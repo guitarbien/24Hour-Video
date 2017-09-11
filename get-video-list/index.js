@@ -78,7 +78,15 @@ function createList(encoding, data, next) {
 exports.handler = function(event, context, callback){
     return callback(null, createSuccessResponse(
         {
-            "video-list": ["video-001", "video-002", "video-003"]
+            "domain": "https://s3.amazonaws.com",
+            "bucket": "bien-serverless-video-transcoded",
+            "files": [
+                {
+                    "filename": "avengers-720p.mp4",
+                    "eTag": "cab1e7013dd8954b0e785cde687a2406",
+                    "size": 3228449
+                }
+            ]
         }
     ));
 
