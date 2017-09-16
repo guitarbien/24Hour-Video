@@ -27,22 +27,20 @@ var generatePolicy = function(principalId, effect, resource) {
 }
 
 exports.handler = function(event, context, callback){
-    callback(null, generatePolicy('user', 'allow', event.methodArn));
+    if (!event.authorizationToken) {
+        callback('Could not find authToken');
+        return;
+    }
 
-    // if (!event.authorizationToken) {
-    //     callback('Could not find authToken');
-    //     return;
-    // }
-    //
-    // var token = event.authorizationToken.split(' ')[1];
-    //
-    // var secretBuffer = new Buffer(process.env.AUTH0_SECRET);
-    // jwt.verify(token, secretBuffer, function(err, decoded){
-    //     if(err){
-    //         console.log('Failed jwt verification: ', err, 'auth: ', event.authorizationToken);
-    //         callback('Authorization Failed');
-    //     } else {
-    //         callback(null, generatePolicy('user', 'allow', event.methodArn));
-    //     }
-    // })
+    var token = event.authorizationToken.split(' ')[1];
+
+    var secretBuffer = new Buffer(process.env.AUTH0_SECRET);
+    jwt.verify(token, secretBuffer, function(err, decoded){
+        if(err){
+            console.log('Failed jwt verification: ', err, 'auth: ', event.authorizationToken);
+            callback('Authorization Failed');
+        } else {
+            callback(null, generatePolicy('user', 'allow', event.methodArn));
+        }
+    })
 };

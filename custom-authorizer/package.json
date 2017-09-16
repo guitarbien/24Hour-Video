@@ -1,7 +1,7 @@
 {
-  "name": "custom-authorizer",
+  "name": "set-permissions",
   "version": "1.0.0",
-  "description": "This Lambda function is used to authorize requests",
+  "description": "This Lambda function will set permissions to make transcoded videos publically available",
   "main": "index.js",
   "scripts": {
     "test": "run-local-lambda --file index.js --event tests/event.json",
@@ -9,11 +9,10 @@
     "predeploy": "zip -r Lambda-Deployment.zip * -x *.zip *.json *.log"
   },
   "dependencies": {
-    "jsonwebtoken": "^5.7.0"
+    "jsonwebtoken": "^8.0.1",
+    "request": "^2.81.0"
   },
-  "author": "Peter Sbarski",
-  "license": "BSD-2-Clause",
-  "devDependencies": {
-    "run-local-lambda": "^1.0.0"
-  }
+  "devDependencies": {},
+  "author": "guitarbien",
+  "license": "BSD-2-Clause"
 }
