@@ -8,6 +8,7 @@
 'use strict';
 
 var jwt = require('jsonwebtoken');
+var jwksClient = require('jwks-rsa');
 
 var generatePolicy = function(principalId, effect, resource) {
     var authResponse = {};
@@ -27,20 +28,34 @@ var generatePolicy = function(principalId, effect, resource) {
 }
 
 exports.handler = function(event, context, callback){
+    console.log(event);
+    // get token
     if (!event.authorizationToken) {
         callback('Could not find authToken');
         return;
     }
-
     var token = event.authorizationToken.split(' ')[1];
 
-    var secretBuffer = new Buffer(process.env.AUTH0_SECRET);
-    jwt.verify(token, secretBuffer, function(err, decoded){
-        if(err){
-            console.log('Failed jwt verification: ', err, 'auth: ', event.authorizationToken);
-            callback('Authorization Failed');
-        } else {
-            callback(null, generatePolicy('user', 'allow', event.methodArn));
-        }
-    })
+    // find signed key
+    var client = jwksClient({
+        strictSsl: true, // Default value
+        jwksUri: 'https://'+ process.env.DOMAIN + '/.well-known/jwks.json'
+    });
+
+    var signingKey;
+    client.getSigningKey(process.env.KID, function(err, key) {
+        signingKey = key.publicKey || key.rsaPublicKey;
+
+        // verify token using the key
+        jwt.verify(token, signingKey, function(err, decoded){
+            if(err){
+                console.log('Failed jwt verification: ', err, 'auth: ', token, ' secret:', signingKey);
+                callback('Authorization Failed');
+            } else {
+                callback(null, generatePolicy('user', 'allow', event.methodArn));
+            }
+        })
+
+    });
+
 };

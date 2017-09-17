@@ -11,33 +11,7 @@ var jwt = require('jsonwebtoken');
 var request = require('request');
 var jwksClient = require('jwks-rsa');
 
-
-function createErrorResponse(code, message) {
-    var response = {
-        'statusCode': code,
-        'headers' : {'Access-Control-Allow-Origin' : '*'},
-        'body' : JSON.stringify({'code': code, 'messsage' : message})
-    }
-
-    return response;
-}
-
-function createSuccessResponse(result) {
-    var response = {
-        'statusCode': 200,
-        'headers' : {'Access-Control-Allow-Origin' : '*'},
-        'body' : JSON.stringify(result)
-    }
-
-    return response;
-}
-function getJwksKey(kid) {
-
-    return signingKey;
-}
-
 exports.handler = function(event, context, callback){
-
     // get token
     if (!event.authToken) {
         callback('Could not find authToken');
@@ -45,17 +19,14 @@ exports.handler = function(event, context, callback){
     }
     var token = event.authToken.split(' ')[1];
 
-
     // find signed key
-    var kid = 'QTRBQTUxOTcyNEUyNUI0QzVGRThBM0ZENEU2NzZFNTBGOUIyMEE2Qg';
-
     var client = jwksClient({
         strictSsl: true, // Default value
         jwksUri: 'https://'+ process.env.DOMAIN + '/.well-known/jwks.json'
     });
 
     var signingKey;
-    client.getSigningKey(kid, function(err, key) {
+    client.getSigningKey(process.env.KID, function(err, key) {
         signingKey = key.publicKey || key.rsaPublicKey;
 
         // verify token using the key
@@ -89,6 +60,5 @@ exports.handler = function(event, context, callback){
         })
 
     });
-
 
 };
