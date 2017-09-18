@@ -24,7 +24,6 @@ var userController = {
     var authParams = {
         language: "zh-tw",
         auth: {
-          // redirectUrl: 'http://24hour-video.dev/website',
           responseType: 'id_token',
           params: {
               scope: 'openid profile email'
@@ -34,10 +33,8 @@ var userController = {
 
     this.data.auth0Lock = new Auth0Lock(config.auth0.clientId, config.auth0.domain, authParams);
 
-
     // Listen for the authenticated event and get profile
     this.data.auth0Lock.on("authenticated", function(authResult) {
-      console.log(authResult);
       profile = JSON.stringify(authResult.idTokenPayload);
 
       localStorage.setItem('id_token', authResult.idToken);
@@ -59,7 +56,7 @@ var userController = {
   configureAuthenticatedRequests: function() {
     $.ajaxSetup({
       'beforeSend': function(xhr) {
-        xhr.setRequestHeader('authorization', 'Bearer ' + localStorage.getItem('id_token'));
+        xhr.setRequestHeader('Authorization', 'Bearer ' + localStorage.getItem('id_token'));
       }
     });
   },
@@ -80,22 +77,6 @@ var userController = {
 
     this.uiElements.loginButton.click(function(e) {
       that.data.auth0Lock.show();
-
-      // that.data.auth0Lock.show(params, function(err, profile, token) {
-      //   console.log('1');
-      //   console.log(err);
-      //   console.log(profile);
-      //   console.log(token);
-      //   if (err) {
-      //     // Error callback
-      //     alert('There was an error');
-      //   } else {
-      //     // Save the JWT token.
-      //     localStorage.setItem('id_token', token);
-      //     that.configureAuthenticatedRequests();
-      //     that.showUserAuthenticationDetails(profile);
-      //   }
-      // });
     });
 
     this.uiElements.logoutButton.click(function(e) {

@@ -50,10 +50,8 @@ exports.handler = function(event, context, callback){
                 request(options, function(error, response, body){
                     if (!error && response.statusCode === 200) {
                         callback(null, body);
-                        // callback(null, createSuccessResponse(body));
                     } else {
                         callback(error);
-                        // callback(null, createErrorResponse(500, error));
                     }
                 });
             }

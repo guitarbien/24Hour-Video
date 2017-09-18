@@ -28,7 +28,8 @@ var generatePolicy = function(principalId, effect, resource) {
 }
 
 exports.handler = function(event, context, callback){
-    console.log(event);
+    console.log('bien test', event);
+
     // get token
     if (!event.authorizationToken) {
         callback('Could not find authToken');
